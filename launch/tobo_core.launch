@@ -1,0 +1,20 @@
+<launch>
+    
+    <arg name="nao_ip"            default="$(optenv NAO_IP 192.168.42.176)"/>
+    <arg name="nao_port"          default="$(optenv NAO_PORT 9559)"/>
+    <arg name="roscore_ip"        default="192.168.42.1"/>
+    <arg name="network_interface" default="wlan0"/>
+    <arg name="namespace"         default="naoqi_driver"/>
+    <arg name="run_naoqi_driver"  default="true"/>
+  
+    <rosparam command="load" file="$(find tobouk_core)/lib_actions/dialogs.yaml"/> 
+    <param name="action_lib_path" type="str" value="$(find tobouk_core)/lib_actions/"/>
+    <param name="nao_state" type="str" value="bussy"/>
+    <param name="trigger_rate" type="int" value="15"/>
+    
+    <node pkg="naoqi_driver" type="naoqi_driver_node" name="$(arg namespace)" required="true" args="--qi-url=tcp://$(arg nao_ip):$(arg nao_port) --roscore_ip=$(arg roscore_ip) --network_interface=$(arg network_interface) --namespace=$(arg namespace)" output="screen" if="$(arg run_naoqi_driver)"/>
+    
+    <node pkg="tobouk_core" type="tobouk_core_node" name="tobo_core_node" output="screen"/>
+    
+    <!--node pkg="tobouk_core" type="tobo_monitor_node" name="tobo_monitor_node" output="screen"/-->
+</launch>
