@@ -26,50 +26,71 @@ ToboCore::ToboCore(ros::NodeHandle& rosNode, std::vector<string> &arguments) :
     ros::Rate hz(30);
 }
 
-void ToboCore::tobo_init()
-{    
-    ros::param::set("/nao_state", "bussy");
-    publish_speech = false;
-    
-    actions_command.push_back("intronau");
-    actions_command.push_back("ivdescription");
-    actions_command.push_back("leadmeditation");
-    actions_command.push_back("taichi");
-    actions_command.push_back("dance");
-    actions_command.push_back("quiz");
-    actions_command.push_back("reward");
-    actions_command.push_back("byenau");
-    
-    ros::param::get("/dialog/intronau", dialog[actions_command[0]]);
-    ros::param::get("/dialog/ivdescription", dialog[actions_command[1]]);
-    ros::param::get("/dialog/leadmeditation", dialog[actions_command[2]]);
-    ros::param::get("/dialog/taichi", dialog[actions_command[3]]);
-    ros::param::get("/dialog/dance", dialog[actions_command[4]]);
-    ros::param::get("/dialog/quiz", dialog[actions_command[5]]);
-    ros::param::get("/dialog/reward", dialog[actions_command[6]]);
-    ros::param::get("/dialog/byenau", dialog[actions_command[7]]);
-    ros::param::get("/actions/leadmeditation", actions[actions_command[2]]);
-    ros::param::get("/actions/taichi", actions[actions_command[3]]);
-    ros::param::get("/actions/dance", actions[actions_command[4]]);
-    ros::param::get("/actions/reward", actions[actions_command[6]]);
-     
-    for(int i = 0; i < actions_command.size(); i++)
-    {
-        it = dialog.find(actions_command[i]);
+void ToboCore::replace_key(std::map<std::string,std::vector<string>>& d, std::string all, std::string to){
+    it = d.begin();
+    while (it != d.end()) {
         std::size_t found = 0;
         for( std::size_t j = 0 ; j < it->second.size() ; ++j )
         {
             while (found!=std::string::npos)
             {
-                found = it->second[j].find(",",found+1);
+                
+                found = it->second[j].find(all,found+1);
                 if (found!=std::string::npos)
-                    it->second[j].replace(found, 1, pause);
+                    it->second[j].replace(found, all.length(), to);
             }
         }
+        it++;
     }
-          
+}
+void ToboCore::tobo_init()
+{    
+    ros::param::set("/nao_state", "bussy");
+    publish_speech = false;
+    /*
+    intro bye ivdescription song1 song2 dance1 dance2 leadmeditation taichi quiz magic - activity
+    introstep preprocedure procedure debrief end - procstep
+    distraction cognitivebehaviour proceduredescription intronau reward byenau - activitytype
+    low medium high vhigh - level
+    */
+    actions_command.push_back("intro");
+    actions_command.push_back("ivdescription");//proceduredescription
+    actions_command.push_back("leadmeditation");
+    actions_command.push_back("taichi");
+    actions_command.push_back("dance");
+    actions_command.push_back("song");
+    actions_command.push_back("bye");
+    actions_command.push_back("quiz"); //(activitycategory quiz distraction)
+    
+    ros::param::get("/intronau/intro", dialog[actions_command[0]]);
+    ros::param::get("/proceduredescription/ivdescription", dialog[actions_command[1]]);
+    ros::param::get("/cognitivebehaviour/leadmeditation", dialog[actions_command[2]]);
+    ros::param::get("/cognitivebehaviour/taichi", dialog[actions_command[3]]);
+    ros::param::get("/reward/dance", dialog[actions_command[4]]);
+    ros::param::get("/reward/song", dialog[actions_command[5]]);
+    ros::param::get("/byenau/bye", dialog[actions_command[6]]);
+        
+    ros::param::get("/distraction/dance", distraction[actions_command[4]]);
+    ros::param::get("/distraction/song", distraction[actions_command[5]]);
+    ros::param::get("/distraction/quiz", distraction[actions_command[7]]);
+    
+    ros::param::get("/cognitive_actions/leadmeditation", actions[actions_command[2]]);
+    ros::param::get("/cognitive_actions/taichi", actions[actions_command[3]]);
+    ros::param::get("/reward_actions/dance", actions[actions_command[4]]);
+    ros::param::get("/reward_actions/song", actions[actions_command[5]]);
+    
+    ros::param::get("/distraction_actions/dance", dis_actions[actions_command[4]]);
+    ros::param::get("/distraction_actions/song", dis_actions[actions_command[5]]);
+    
+    string child_name;
+    ros::param::param<std::string>("/child_name", child_name, "Andres");
+     
+    replace_key(dialog, ",", pause);
+    replace_key(dialog, "name", child_name);
+    replace_key(distraction, ",", pause);
+              
     srv_aliveness.request.data = "AutonomousBlinking 0";
-    service_aliveness_client.waitForExistence();
+    service_aliveness_client.waitForExistence(ros::Duration(30.0));
     service_aliveness_client.call(srv_aliveness);
     
     srv_language.request.data = 50.0;
@@ -108,34 +129,37 @@ void ToboCore::tobo_config()
 
 void ToboCore::tobo_multimodal_output()
 {
-    multimodal_command = rate;
-    
-    int command_type = 100;
-    for(int i = 0; i < actions_command.size(); i++) {
-        if (get_action_command.find(actions_command[i]) != std::string::npos)
-        {
-            command_type = i;
-            ROS_INFO("%s", actions_command[i].c_str());
-        }
-    }
-    if (command_type != 100)
-    {
-        it = dialog.find(actions_command[command_type]);
-        if (it != dialog.end())
-            multimodal_command += it->second[0];
-            
-        it = actions.find(actions_command[command_type]);
-        if (it != actions.end())
-            multimodal_command += it->second[0];
-        multimodal_command += stand;
+    multimodal_command = "";
+    string activity = get_action_command[0];
+    string activitytype = get_action_command[1];
+    if (std::find_if(activity.begin(), activity.end(), ::isdigit) != activity.end())
+        activity.erase(std::find_if(activity.begin(), activity.end(), ::isdigit));
+
+    if (activitytype.find("distraction") != std::string::npos){
+      it = distraction.find(activity);
+      if (it != distraction.end()){
+        multimodal_command = rate;
+        multimodal_command += it->second[0];
+        it = dis_actions.find(activity);
+        if (it != dis_actions.end())
+          multimodal_command += it->second[0];
         publish_speech = true;
-    }else{
-        multimodal_command = "";
-        publish_speech = false;
-        ROS_INFO("Transition action or bad get_action_input");
+      }
     }
-    //ROS_INFO("String command: %s", multimodal_command.c_str());
+    else{
+      it = dialog.find(activity);
+      if (it != dialog.end()){
+        multimodal_command = rate;
+        multimodal_command += it->second[0];
+        it = actions.find(activity);
+        if (it != actions.end())
+          multimodal_command += it->second[0];
+        publish_speech = true;
+      }
+    }
+    ROS_INFO("String command: %s", multimodal_command.c_str());
 }
+
 void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
 {
     diagnostic_msgs::DiagnosticStatus nao_stat;
@@ -149,7 +173,8 @@ void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
     action_executed_msg.parameters = msg.parameters;
     
     if (action_type.find("doactivity") != std::string::npos){
-      get_action_command = msg.parameters[0];
+      get_action_command = msg.parameters;
+      ROS_INFO("String command: %s", get_action_command[0].c_str());
       tobo_multimodal_output();
     
       if (publish_speech){
