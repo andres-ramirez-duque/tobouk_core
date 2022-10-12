@@ -2,7 +2,7 @@
     
     <arg name="nao_ip"            default="$(optenv NAO_IP 192.168.42.176)"/>
     <arg name="nao_port"          default="$(optenv NAO_PORT 9559)"/>
-    <arg name="roscore_ip"        default="192.168.42.1"/>
+    <arg name="roscore_ip"        default="10.42.0.254"/>
     <arg name="network_interface" default="wlan0"/>
     <arg name="namespace"         default="naoqi_driver"/>
     <arg name="run_naoqi_driver"  default="true"/>

@@ -1,68 +1,96 @@
 # Dialogs scripting 
+#    (introducing intro)
+#    (diverting dance1)
+#    (diverting dance2)
+#    (diverting song1)
+#    (diverting song2)
+#    (diverting quiz)
+#    (diverting magic)    
+#    (calming leadmeditation)
+#    (calming taichi)
+#    (calming story)
+#    (withdrawl bowout)
+#    (procedureinfo ivdescription)
+#    (patientstrategyinfo strategyenforce)
+#    (reward song1)
+#    (reward song2)
+#    (finalise bye)
 ---
 #Introduction
-intronau:
+dialogs:
     intro:
         - 'Hi name im Tobo, it is nice to meet you Welcome to the Stollery Children Hospital Emergency Department, I am so excited to play with you today, how are you'
         - 'Hi name, I hear that you are having a medical test, I also just had one so lets do this together, I will be here with you for the whole time Let me get comfortable just like you can get comfortable'
 # Education    
-proceduredescription:
     ivdescription:
         - 'The doctors, need to give your body some medicine, and the quickest way to get the medicine to your body, is through the IV'
+        - 'In the first step, the nurse will put a rubber band on your arm, this helps the doctors find your veins, it will feel snug like a hug'
+        - 'An IV is a very skinny tube that looks like a small straw. It will be put in your vein and will give you medicine or water'
         - 'Veins go all over your body and will be able to get the medicine to the place that is hurting really quickly'
-        - 'The IV is a tiny straw, that goes into the vein'
 #Approach, Friendship and support, Normalizes experience
-cognitivebehaviour:
     leadmeditation:
-        - 'I know, that taking deep breaths helps me relax. Lets try this together, Breathe in through your nose, hold your breath for two seconds, and out through your mouth. One more time try it with me'
+        - 'When I am scared, breathing deeply can help me. Lets try this together, Breathe in through your nose, hold your breath for two seconds, and out through your mouth. One more time try it with me'
         - 'empty'
     taichi:
+        - 'I know some relaxation exercises, I am going to show you some to relax together'
         - 'Wow, Lets do something relaxing'
         - 'empty'
 
 # Positive suggestion, distraction, relaxation exercises 
-distraction:
     dance:
-        - 'Here is a new dance, I just learned, maybe you have heard this song before'
-        - 'I want to show you how I can dance while sitting down'
+        - 'When I feel nervous, sometimes dancing helps, so I want to dance with you, maybe you have heard this song before'
         - 'Lets dance'
-    
+
     song:
         - 'Lets sing and dance'
-        
+        - 'Lets sing'
 
-    quiz:
+    quiz: #diverting
         - 'What are we going to remember for last time'
         - 'What did you do really well'
         - 'What are we going to do to celebrate'
         - 'What went well'
 
 # Positive reinforcement, Reward
-reward:
-    dance:
+    ivdebrief_song:
         - 'Great job, I think we should celebrate how brave you are'
         - 'I would like to congratulate you on how brave you are'
         - 'I think you have done a good job, and should congratulate yourself'
         - 'awesome job, we are proud of you'
-        
-    song:
         - 'ok, the hardest part is done, come on lets sing'
 
-byenau:
     bye:
+        - 'Well we did it. It was nice to meet you name. Until the next time'
         - 'This was very nice name, I hope you enjoyed it as much as I did'
         - 'name, It was really nice to meet you'
         - 'name, It was really great to meet you'
-
-cognitive_actions:
+    
+    story:
+        - 'Once upon a time, some hunters were chasing after an elephant. The elephant was scared and did not know what to do. After a while she met her friend Ant on the road, and told Ant about her problem. Ant said, do not worry, just hide behind me'
+        - 'empty'
+    
+    magic:
+        - 'I want to show you how I can dance, I want to make it a new trend'
+        - 'empty'
+    
+    bowout:
+        - 'I think it is time to end my performance, see you later'
+        - 'empty'
+    
+    strategyenforce: #During SiteCheck -> sceducateonprocedure
+        - 'The veins run throughout the body carrying blood and oxygen as well as the medicine that the doctors will give you'
+        - 'The IV is a tiny straw, that goes into the vein'
+        - 'empty'
+        
+actions:
     leadmeditation:
         - ' ^call(ALBehaviorManager.runBehavior("breathing/behavior_1"))'
         
     taichi:
         - ' ^call(ALBehaviorManager.runBehavior("taichi/taichi"))'
 
-distraction_actions:
     dance:
+        - ' ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
         - ' ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
         
     song:
@@ -70,14 +98,18 @@ distraction_actions:
         - ' ^runSound(ALBehaviorManager.runBehavior("song1"))'
         - ' ^runSound(ALBehaviorManager.runBehavior("song2"))'
 
-reward_actions:
-    dance:
-        - ' ^call(ALBehaviorManager.runBehavior("arm_dance/arm_dance"))'
+    magic:
+        - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))' #arm_dance/behavior_1
+        - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))'
         
-    song:
+    ivdebrief_song:
         - ' ^call(ALBehaviorManager.runBehavior("animations/Stand/Waiting/AirGuitar_1"))'
         - ' ^runSound(ALBehaviorManager.runBehavior("song1"))'
         - ' ^runSound(ALBehaviorManager.runBehavior("song2"))'
+
+request:
+    preference:
+        - 'I would like to ask you something, which of the following activity type do you prefer, acti_1 or acti_2'
 # song ["animations/Sit/Waiting/Music_HighwayToHell_1","animations/Sit/Waiting/Music_VieEnRose_1","animations/Stand/Waiting/HappyBirthday_1"]
 # saxophone/behavior_1
 # animations/Stand/Waiting/AirGuitar_1 ["guitar","music","musician","rock"]

@@ -20,6 +20,8 @@ class ToboCore
 public:
 
     ToboCore(ros::NodeHandle& rosNode, std::vector<string> &arguments);
+    std::vector<std::string> actions_command;
+    std::map<std::string,int> actions_count;
     
 private: 
 
@@ -35,21 +37,19 @@ private:
     ros::Time get_action_stamp;
     std::vector<std::string> last_action_command;
     bool publish_speech;
+    bool publish_request;
     string multimodal_command;
+    string request_command;
     
     string rate =R"( \RSPD=60\ )";
     string pause =R"( \PAU=300\ )";
     string run = " ^call(ALBehaviorManager.runBehavior(\"ToDo\")) ";
     string stand = " ^call(ALRobotPosture.goToPosture(\"Stand\", 0.7)) ";
     
-    std::vector<std::string> actions_command;
-    
     std::map<std::string,std::vector<string>>::iterator it;
     std::map<std::string,std::vector<string>> dialog;
     std::map<std::string,std::vector<string>> actions;
-    
-    std::map<std::string,std::vector<string>> distraction;
-    std::map<std::string,std::vector<string>> dis_actions;
+    std::map<std::string,std::vector<string>> request_dialog;
     
     naoqi_bridge_msgs::SetString srv_wakeup;
     naoqi_bridge_msgs::SetString srv_leds;
@@ -69,5 +69,6 @@ private:
     void tobo_config(); // Config the robot state
     void tobo_action_callback(const tobo_planner::action_chain& msg);
     void tobo_multimodal_output();
+    void tobo_request_output();
     void replace_key(std::map<std::string,std::vector<string>>& d, std::string all, std::string to);
 };

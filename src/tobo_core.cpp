@@ -16,12 +16,7 @@ ToboCore::ToboCore(ros::NodeHandle& rosNode, std::vector<string> &arguments) :
     service_animation_client = rosNode.serviceClient<naoqi_bridge_msgs::SetString>("/naoqi_driver/set_animation");
     service_aliveness_client = rosNode.serviceClient<naoqi_bridge_msgs::SetString>("/naoqi_driver/set_aliveness");
     service_language_client = rosNode.serviceClient<naoqi_bridge_msgs::SetFloat>("/naoqi_driver/set_language");
-    
-    while(!ros::param::has("/nao_state"))
-    {
-    ROS_INFO("Waiting for nao_state initialization");
-    }
-    
+       
     tobo_init();
     ros::Rate hz(30);
 }
@@ -45,49 +40,57 @@ void ToboCore::replace_key(std::map<std::string,std::vector<string>>& d, std::st
 }
 void ToboCore::tobo_init()
 {    
-    ros::param::set("/nao_state", "bussy");
     publish_speech = false;
+    publish_request = false;
     /*
-    intro bye ivdescription song1 song2 dance1 dance2 leadmeditation taichi quiz magic - activity
-    introstep preprocedure procedure debrief end - procstep
-    distraction cognitivebehaviour proceduredescription intronau reward byenau - activitytype
-    low medium high vhigh - level
+    intro bye ivdescription song1 song2 dance1 dance2 leadmeditation taichi story quiz magic bowout strategyenforce
     */
     actions_command.push_back("intro");
-    actions_command.push_back("ivdescription");//proceduredescription
+    actions_command.push_back("ivdescription");
     actions_command.push_back("leadmeditation");
     actions_command.push_back("taichi");
     actions_command.push_back("dance");
     actions_command.push_back("song");
     actions_command.push_back("bye");
-    actions_command.push_back("quiz"); //(activitycategory quiz distraction)
+    actions_command.push_back("quiz");
+    actions_command.push_back("story");
+    actions_command.push_back("magic");
+    actions_command.push_back("bowout");
+    actions_command.push_back("strategyenforce");
+    actions_command.push_back("ivdebrief_song");
     
-    ros::param::get("/intronau/intro", dialog[actions_command[0]]);
-    ros::param::get("/proceduredescription/ivdescription", dialog[actions_command[1]]);
-    ros::param::get("/cognitivebehaviour/leadmeditation", dialog[actions_command[2]]);
-    ros::param::get("/cognitivebehaviour/taichi", dialog[actions_command[3]]);
-    ros::param::get("/reward/dance", dialog[actions_command[4]]);
-    ros::param::get("/reward/song", dialog[actions_command[5]]);
-    ros::param::get("/byenau/bye", dialog[actions_command[6]]);
-        
-    ros::param::get("/distraction/dance", distraction[actions_command[4]]);
-    ros::param::get("/distraction/song", distraction[actions_command[5]]);
-    ros::param::get("/distraction/quiz", distraction[actions_command[7]]);
+    ros::param::get("/dialogs/intro", dialog[actions_command[0]]);
+    ros::param::get("/dialogs/ivdescription", dialog[actions_command[1]]);
+    ros::param::get("/dialogs/leadmeditation", dialog[actions_command[2]]);
+    ros::param::get("/dialogs/taichi", dialog[actions_command[3]]);
+    ros::param::get("/dialogs/dance", dialog[actions_command[4]]);
+    ros::param::get("/dialogs/song", dialog[actions_command[5]]);
+    ros::param::get("/dialogs/bye", dialog[actions_command[6]]);
+    ros::param::get("/dialogs/quiz", dialog[actions_command[7]]);
+    ros::param::get("/dialogs/story", dialog[actions_command[8]]);
+    ros::param::get("/dialogs/magic", dialog[actions_command[9]]);
+    ros::param::get("/dialogs/bowout", dialog[actions_command[10]]);
+    ros::param::get("/dialogs/strategyenforce", dialog[actions_command[11]]);
+    ros::param::get("/dialogs/ivdebrief_song", dialog[actions_command[12]]);
+
+    ros::param::get("/actions/leadmeditation", actions[actions_command[2]]);
+    ros::param::get("/actions/taichi", actions[actions_command[3]]);
+    ros::param::get("/actions/dance", actions[actions_command[4]]);
+    ros::param::get("/actions/song", actions[actions_command[5]]);
+    ros::param::get("/actions/magic", actions[actions_command[9]]);
+    ros::param::get("/actions/ivdebrief_song", actions[actions_command[12]]);
     
-    ros::param::get("/cognitive_actions/leadmeditation", actions[actions_command[2]]);
-    ros::param::get("/cognitive_actions/taichi", actions[actions_command[3]]);
-    ros::param::get("/reward_actions/dance", actions[actions_command[4]]);
-    ros::param::get("/reward_actions/song", actions[actions_command[5]]);
+    ros::param::get("/request/preference/", request_dialog["preference"]);
     
-    ros::param::get("/distraction_actions/dance", dis_actions[actions_command[4]]);
-    ros::param::get("/distraction_actions/song", dis_actions[actions_command[5]]);
+    for (auto c : actions_command)
+      actions_count.emplace(c, 0);
     
     string child_name;
     ros::param::param<std::string>("/child_name", child_name, "Andres");
      
     replace_key(dialog, ",", pause);
     replace_key(dialog, "name", child_name);
-    replace_key(distraction, ",", pause);
+    replace_key(request_dialog, ",", pause);
               
     srv_aliveness.request.data = "AutonomousBlinking 0";
     service_aliveness_client.waitForExistence(ros::Duration(30.0));
@@ -117,49 +120,45 @@ void ToboCore::tobo_init()
 
 void ToboCore::tobo_config()
 {   
-    ros::param::set("/nao_state", "bussy");
     srv_animation.request.data = " ";
       
     service_wakeup_client.call(srv_wakeup);
     service_leds_client.call(srv_leds);
     service_animation_client.call(srv_animation);
     service_aliveness_client.call(srv_aliveness);
-    ros::param::set("/nao_state", "available");
 }
 
 void ToboCore::tobo_multimodal_output()
 {
     multimodal_command = "";
     string activity = get_action_command[0];
-    string activitytype = get_action_command[1];
+    
     if (std::find_if(activity.begin(), activity.end(), ::isdigit) != activity.end())
         activity.erase(std::find_if(activity.begin(), activity.end(), ::isdigit));
-
-    if (activitytype.find("distraction") != std::string::npos){
-      it = distraction.find(activity);
-      if (it != distraction.end()){
-        multimodal_command = rate;
-        multimodal_command += it->second[0];
-        it = dis_actions.find(activity);
-        if (it != dis_actions.end())
-          multimodal_command += it->second[0];
-        publish_speech = true;
-      }
+        
+    it = dialog.find(activity);
+    if (it != dialog.end()){
+      multimodal_command = rate;
+      multimodal_command += it->second[actions_count[activity]];
+      it = actions.find(activity);
+      if (it != actions.end())
+        multimodal_command += it->second[actions_count[activity]];
+      publish_speech = true;
+      actions_count[activity]++;
     }
-    else{
-      it = dialog.find(activity);
-      if (it != dialog.end()){
-        multimodal_command = rate;
-        multimodal_command += it->second[0];
-        it = actions.find(activity);
-        if (it != actions.end())
-          multimodal_command += it->second[0];
-        publish_speech = true;
-      }
-    }
-    ROS_INFO("String command: %s", multimodal_command.c_str());
 }
 
+void ToboCore::tobo_request_output()
+{
+    request_command = rate;
+    string activity_1 = "Calm";
+    string activity_2 = "Active";
+    replace_key(request_dialog, "acti_1", activity_1);
+    replace_key(request_dialog, "acti_2", activity_2);
+    request_command += request_dialog["preference"][0];
+    
+    publish_request = true;
+}
 void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
 {
     diagnostic_msgs::DiagnosticStatus nao_stat;
@@ -171,9 +170,17 @@ void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
     action_executed_msg.plan_step = msg.plan_step;
     string action_type = msg.action_type;
     action_executed_msg.parameters = msg.parameters;
+    string hierarchy_name = "/action_hierarchy/" + action_type;
+    string hierarchy_value;
+    ros::param::get(hierarchy_name, hierarchy_value);
     
-    if (action_type.find("doactivity") != std::string::npos){
-      get_action_command = msg.parameters;
+    if (hierarchy_value.find("doactivity") != std::string::npos){
+      if (action_type.find("ivdebrief") != std::string::npos){
+        get_action_command = msg.parameters;
+        get_action_command[0] = "ivdebrief_" + get_action_command[0];
+      }else{
+        get_action_command = msg.parameters;
+      }
       ROS_INFO("String command: %s", get_action_command[0].c_str());
       tobo_multimodal_output();
     
@@ -194,22 +201,30 @@ void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
       action_executed_msg.execution_status = nao_stat;
       action_executed_msg.speech_cmd=string(multimodal_command);  
       tobo_speech_pub.publish(action_executed_msg);
+    }else if (hierarchy_value.find("qtypepreference") != std::string::npos){
+      tobo_request_output();
+    
+      if (publish_request){
+        nao_stat.message="Request command Sent";
+        nao_value.key="Wrong  qtypepreference input";
+        nao_value.value = "False";
+        nao_stat.values.push_back(nao_value);
+        nao_stat.level = diagnostic_msgs::DiagnosticStatus::OK;
+      }
+      else{
+        nao_stat.message="Request command Sent";
+        nao_value.key="Wrong  qtypepreference input";
+        nao_value.value = "True";
+        nao_stat.values.push_back(nao_value);
+        nao_stat.level = diagnostic_msgs::DiagnosticStatus::WARN;
+      }
+      action_executed_msg.execution_status = nao_stat;
+      action_executed_msg.speech_cmd=string(request_command);  
+      tobo_speech_pub.publish(action_executed_msg);
     }
+    
     srv_aliveness.request.data = "BackgroundMovement 1";
     service_aliveness_client.call(srv_aliveness);
     publish_speech=false;
+    publish_request=false;
 }
-/*
-bool ToboCore::reset_service(meri_local::Reset::Request  &req, meri_local::Reset::Response &res)
-{
-    if (req.a == 2){
-    clnf_model.Reset();
-    }
-    tracker_init=false;
-    ROS_INFO("Tracker reseted");
-    res.b=req.a;
-    return true;
-}
-"\\style=joyful\\ \\rspd=80\\ Hello my friends \\pau=1000\\ \\vol=30\\how are you ^start(animations/Stand/Gestures/Hey_1) this is the number "
-[{"name":"AutonomousBlinking","enabled":true,"running":true},{"name":"BackgroundMovement","enabled":true,"running":true},{"name":"BasicAwareness","enabled":false,"running":false},{"name":"ListeningMovement","enabled":false,"running":false},{"name":"SpeakingMovement","enabled":true,"running":false}]
-*/
