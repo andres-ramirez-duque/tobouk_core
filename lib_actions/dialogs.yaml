@@ -19,7 +19,7 @@
 #Introduction
 dialogs:
     intro:
-        - 'Hi name im Tobo, it is nice to meet you Welcome to the Stollery Children Hospital Emergency Department, I am so excited to play with you today, how are you'
+        - 'Hi name im Tobo, it is nice to meet you Welcome to the Hospital, I am so excited to play with you today, how are you'
         - 'Hi name, I hear that you are having a medical test, I also just had one so lets do this together, I will be here with you for the whole time Let me get comfortable just like you can get comfortable'
 # Education    
     ivdescription:
@@ -110,18 +110,3 @@ actions:
 request:
     preference:
         - 'I would like to ask you something, which of the following activity type do you prefer, acti_1 or acti_2'
-# song ["animations/Sit/Waiting/Music_HighwayToHell_1","animations/Sit/Waiting/Music_VieEnRose_1","animations/Stand/Waiting/HappyBirthday_1"]
-# saxophone/behavior_1
-# animations/Stand/Waiting/AirGuitar_1 ["guitar","music","musician","rock"]
-# "arm_dance/arm_dance"
-# Thriller, Gangnam style, danza de las manos
-
-#dialog_a: '\\rspd=80\\ Hi im Tobo \\pau=300\\ it is nice to meet you Welcome to the Stollery Children Hospital Emergency Department \\pau=300\\ I am so excited to play with you today \\pau=300\\ how are you ^call(ALRobotPosture.goToPosture("Stand", 0.7))'
-
-#dialog_b: '\\rst\\ \\rspd=80\\ I hear that you are having a medical test  \\pau=300\\ I also just had one so lets do this together \\pau=300\\ I will be here with you for the whole time Let me get comfortable just like you can get comfortable ^call(ALRobotPosture.goToPosture("Stand", 0.7))'
-
-#dialog_c: '\\rspd=80\\ Great job \\pau=800\\ I think we should celebrate how brave you are \\pau=800\\ Here is a new dance \\pau=300\\ I just learned ^call(ALRobotPosture.goToPosture("Stand", 0.7))'
-
-#dialog_d : '\\rspd=80\\ I know that taking deep breaths helps me relax lets try this together \\pau=300\\ Breathe in through your nose hold your breath for 2 seconds \\pau=2000\\ now out through your mouth \\pau=300\\ One more time try it with me ^call(ALRobotPosture.goToPosture("Stand", 0.7))'
-
-#dialog_e : '\\rspd=80\\ Lets do the macarena dance ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
