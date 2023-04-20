@@ -81,35 +81,36 @@ dialogs:
         - 'The veins run throughout the body carrying blood and oxygen as well as the medicine that the doctors will give you'
         - 'The IV is a tiny straw, that goes into the vein'
         - 'empty'
-        
-actions:
-    leadmeditation:
-        - ' ^call(ALBehaviorManager.runBehavior("breathing/behavior_1"))'
-        
-    taichi:
-        - ' ^call(ALBehaviorManager.runBehavior("taichi/taichi"))'
-
-    dance:
-        - ' ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
-        - ' ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
-        
-    song:
-        - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))'
-        - ' ^runSound(ALBehaviorManager.runBehavior("song1"))'
-        - ' ^runSound(ALBehaviorManager.runBehavior("song2"))'
-
-    magic:
-        - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))' #arm_dance/behavior_1
-        - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))'
-        
-    ivdebrief_song:
-        - ' ^call(ALBehaviorManager.runBehavior("animations/Stand/Waiting/AirGuitar_1"))'
-        - ' ^runSound(ALBehaviorManager.runBehavior("song1"))'
-        - ' ^runSound(ALBehaviorManager.runBehavior("song2"))'
 
 request:
     preference:
         - 'I would like to ask you something, which of the following activity type do you prefer, acti_1 or acti_2'
+                
+#actions:
+#    leadmeditation:
+#        - ' ^call(ALBehaviorManager.runBehavior("breathing/behavior_1"))'
+#        
+#    taichi:
+#        - ' ^call(ALBehaviorManager.runBehavior("taichi/taichi"))'
+#
+#    dance:
+#        - ' ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
+#        - ' ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
+#        
+#    song:
+#        - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))'
+#        - ' ^runSound(ALBehaviorManager.runBehavior("song1"))'
+#        - ' ^runSound(ALBehaviorManager.runBehavior("song2"))'
+#
+#    magic:
+#        - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))' #arm_dance/behavior_1
+#        - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))'
+#        
+#    ivdebrief_song:
+#        - ' ^call(ALBehaviorManager.runBehavior("animations/Stand/Waiting/AirGuitar_1"))'
+#        - ' ^runSound(ALBehaviorManager.runBehavior("song1"))'
+#        - ' ^runSound(ALBehaviorManager.runBehavior("song2"))'
+#
 # song ["animations/Sit/Waiting/Music_HighwayToHell_1","animations/Sit/Waiting/Music_VieEnRose_1","animations/Stand/Waiting/HappyBirthday_1"]
 # saxophone/behavior_1
 # animations/Stand/Waiting/AirGuitar_1 ["guitar","music","musician","rock"]

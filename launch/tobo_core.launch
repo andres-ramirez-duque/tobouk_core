@@ -7,7 +7,8 @@
     <arg name="namespace"         default="naoqi_driver"/>
     <arg name="run_naoqi_driver"  default="true"/>
   
-    <rosparam command="load" file="$(find tobouk_core)/lib_actions/dialogs.yaml"/> 
+    <rosparam command="load" file="$(find tobouk_core)/lib_actions/dialogs.yaml"/>
+    <rosparam command="load" file="$(find tobouk_core)/lib_actions/actions.yaml"/> 
     <param name="action_lib_path" type="str" value="$(find tobouk_core)/lib_actions/"/>
     <param name="nao_state" type="str" value="bussy"/>
     <param name="trigger_rate" type="int" value="15"/>
