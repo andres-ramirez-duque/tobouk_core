@@ -86,10 +86,13 @@ void ToboCore::tobo_init()
       actions_count.emplace(c, 0);
     
     string child_name;
+    string hospital_name;
     ros::param::param<std::string>("/child_name", child_name, "Andres");
+    ros::param::param<std::string>("/hospital_name", hospital_name, "Sick Kids hospital");
      
     replace_key(dialog, ",", pause);
     replace_key(dialog, "name", child_name);
+    replace_key(dialog, "hospital", hospital_name);
     replace_key(request_dialog, ",", pause);
               
     srv_aliveness.request.data = "AutonomousBlinking 0";
