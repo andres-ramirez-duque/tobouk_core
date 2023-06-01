@@ -19,8 +19,8 @@
 #Introduction
 dialogs:
     intro:
-        - 'Hi name im Tobo, it is nice to meet you Welcome to the hospital, I am so excited to play with you today, how are you, , I hear that you are having a poke, I also just had one so lets do this together, I will be here with you for the whole time'
-        - 'Hi name, I hear that you are having a needle, I also just had one so lets do this together, I will be here with you for the whole time'
+        - 'Hi <name> im Tobo, it is nice to meet you Welcome to the <hospitalname> , I am so excited to play with you today, how are you, , I hear that you are having a poke, I also just had one so lets do this together, I will be here with you for the whole time'
+        - 'Hi <name>, I hear that you are having a needle, I also just had one so lets do this together, I will be here with you for the whole time'
 # Education    
     ivdescription:
         - 'The doctors, need to give your body some medicine, and the quickest way to get the medicine to your body, is through the IV, first, the nurse will put a rubber band on your arm, this helps the doctors find your veins, it will feel snug like a hug, Next, the nurse will clean the area with soap. It feels cold and wet'
@@ -41,7 +41,7 @@ dialogs:
         - 'Lets dance'
 
     song:
-        - 'I fell so good when I hear this music, do you want to hear the next song with me
+        - 'I fell so good when I hear this music, do you want to hear the next song with me'
         - 'Lets sing and dance'
         - 'Lets sing'
 
@@ -60,10 +60,10 @@ dialogs:
         - 'ok, the hardest part is done, come on lets sing'
 
     bye:
-        - 'Well we did it. It was nice to meet you name. Until the next time'
-        - 'This was very nice name, I hope you enjoyed it as much as I did'
-        - 'name, It was really nice to meet you'
-        - 'name, It was really great to meet you'
+        - 'Well we did it. It was nice to meet you <name>. Until the next time'
+        - 'This was very nice <name>, I hope you enjoyed it as much as I did'
+        - '<name>, It was really nice to meet you'
+        - '<name>, It was really great to meet you'
     
     story:
         - 'Once upon a time, some hunters were chasing after an elephant. The elephant was scared and did not know what to do. After a while she met her friend Ant on the road, and told Ant about her problem. Ant said, do not worry, just hide behind me'

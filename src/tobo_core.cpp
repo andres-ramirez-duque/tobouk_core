@@ -6,9 +6,9 @@ using namespace std;
 ToboCore::ToboCore(ros::NodeHandle& rosNode, std::vector<string> &arguments) :
             rosNode(rosNode)
 {
-    tobo_action_sub = rosNode.subscribe("/next_action", 1000,&ToboCore::tobo_action_callback,this);
+    tobo_action_sub = rosNode.subscribe("/next_action", 1,&ToboCore::tobo_action_callback,this);
     
-    tobo_speech_pub = rosNode.advertise<tobo_planner::action_chain>("/animated_speech", 10);
+    tobo_speech_pub = rosNode.advertise<tobo_planner::action_chain>("/animated_speech", 1);
     //tobo_action_executed_pub = rosNode.advertise<tobo_planner::action_chain>("/action_executed", 10);
 
     service_wakeup_client = rosNode.serviceClient<naoqi_bridge_msgs::SetString>("/naoqi_driver/set_wakeup");
@@ -16,7 +16,7 @@ ToboCore::ToboCore(ros::NodeHandle& rosNode, std::vector<string> &arguments) :
     service_animation_client = rosNode.serviceClient<naoqi_bridge_msgs::SetString>("/naoqi_driver/set_animation");
     service_aliveness_client = rosNode.serviceClient<naoqi_bridge_msgs::SetString>("/naoqi_driver/set_aliveness");
     service_language_client = rosNode.serviceClient<naoqi_bridge_msgs::SetFloat>("/naoqi_driver/set_language");
-       
+         
     tobo_init();
     ros::Rate hz(30);
 }
@@ -88,15 +88,20 @@ void ToboCore::tobo_init()
     string child_name;
     string hospital_name;
     ros::param::param<std::string>("/child_name", child_name, "Andres");
-    ros::param::param<std::string>("/hospital_name", hospital_name, "Sick Kids hospital");
+    ros::param::param<std::string>("/hospital_name", hospital_name, "SickKidshospital");
+    
+    replace_key(request_dialog, ",", pause);
      
     replace_key(dialog, ",", pause);
-    replace_key(dialog, "name", child_name);
-    replace_key(dialog, "hospital", hospital_name);
-    replace_key(request_dialog, ",", pause);
-              
+    replace_key(dialog, "<name>", child_name);
+    replace_key(dialog, "<hospitalname>", hospital_name);
+    
     srv_aliveness.request.data = "AutonomousBlinking 0";
-    service_aliveness_client.waitForExistence(ros::Duration(30.0));
+    
+    if (! service_aliveness_client.waitForExistence(ros::Duration(30.0))){
+      ROS_INFO("Stoping Node for NaoQi inactivity");
+      ros::shutdown();
+    }
     service_aliveness_client.call(srv_aliveness);
     
     srv_language.request.data = 50.0;

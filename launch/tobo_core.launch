@@ -15,7 +15,5 @@
     
     <node pkg="naoqi_driver" type="naoqi_driver_node" name="$(arg namespace)" required="true" args="--qi-url=tcp://$(arg nao_ip):$(arg nao_port) --roscore_ip=$(arg roscore_ip) --network_interface=$(arg network_interface) --namespace=$(arg namespace)" output="screen" if="$(arg run_naoqi_driver)"/>
     
-    <node pkg="tobouk_core" type="tobouk_core_node" name="tobo_core_node" output="screen"/>
-    
-    <!--node pkg="tobouk_core" type="tobo_monitor_node" name="tobo_monitor_node" output="screen"/-->
+    <node pkg="tobouk_core" type="tobouk_core_node" name="tobo_core_node" output="screen" if="$(arg run_naoqi_driver)"/>
 </launch>
