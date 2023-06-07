@@ -1,18 +1,18 @@
 actions:
   dance:
-  - ' ^call(ALBehaviorManager.runBehavior("calmdown/behavior_1"))'
+  - ' ^call(ALBehaviorManager.runBehavior("shakeit/behavior_1"))'
   - ' ^call(ALBehaviorManager.runBehavior("arm_dance/behavior_1"))'
   ivdebrief_song:
-  - ' ^call(ALBehaviorManager.runBehavior("happy/behavior_1"))'
+  - ' ^call(ALBehaviorManager.runBehavior("shakeit/behavior_1"))'
   - ' ^runSound(ALBehaviorManager.runBehavior("guitar/behavior_1"))'
   leadmeditation:
-  - ' ^call(ALBehaviorManager.runBehavior("cookies/behavior_1"))'
+  - ' ^call(ALBehaviorManager.runBehavior("breathing/behavior_1"))'
   - ' ^call(ALBehaviorManager.runBehavior("breathing/behavior_1"))'
   magic:
-  - ' ^call(ALBehaviorManager.runBehavior("bam/behavior_1"))'
+  - ' ^call(ALBehaviorManager.runBehavior("shakeit/behavior_1"))'
   - ' ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
   song:
-  - ' ^call(ALBehaviorManager.runBehavior("shakeit/behavior_1"))'
+  - ' ^call(ALBehaviorManager.runBehavior("look/behavior_1"))'
   - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))'
   taichi:
   - ' ^call(ALBehaviorManager.runBehavior("taichi/taichi"))'
