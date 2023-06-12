@@ -19,7 +19,7 @@
 #Introduction
 dialogs:
     intro:
-        - 'Hi <name> im Tobo, it is nice to meet you Welcome to the <hospitalname> , I am so excited to play with you today, how are you, , I hear that you are having a poke, I also just had one so lets do this together, I will be here with you for the whole time'
+        - 'Hi <name> , im Tobo, it is nice to meet you Welcome to the <hospitalname> , I am so excited to play with you today, how are you, , I hear that you are having a poke, I also just had one so lets do this together, I will be here with you for the whole time'
         - 'Hi <name>, I hear that you are having a needle, I also just had one so lets do this together, I will be here with you for the whole time'
 # Education    
     ivdescription:
@@ -28,7 +28,7 @@ dialogs:
         - 'Veins are inside of your body and run from the tip of your toes to the top of your head. They are like highways for your blood. Veins carry vitamins, oxygen, and also bring medicine to the places where your body needs it most'
 #Approach, Friendship and support, Normalizes experience
     leadmeditation:
-        - 'When I am scared, breathing deeply can help me. Lets try this together, Breathe in through your nose, hold your breath for two seconds, and out through your mouth. Lets do some breathing exercises'
+        - 'When I am scared, breathing deeply can help me. Lets try this together, Breathe in through your nose, hold your breath for two seconds, and out through your mouth. Lets do some breathing exercises, My friend will sing you a song to help you with your breathing'
         - 'empty'
     taichi:
         - 'I know some relaxation exercises, would you like to see them, I am going to show you some so we can relax together'
@@ -52,7 +52,7 @@ dialogs:
 
 # Positive reinforcement, Reward
     ivdebrief_song:
-        - 'That was a hard job, and you did great, even though that was hard, you did awesome, also, you did a great job staying still and listening to the nurse'
+        - 'That was a hard job, and you did great, even though that was hard, you did awesome, also, you did a great job staying still and listening to the nurse, Lets celebrate my singing a song together'  
         - 'Great job, I think we should celebrate how brave you are'
         - 'I would like to congratulate you on how brave you are'
         - 'I think you have done a good job, and should congratulate yourself'
@@ -66,7 +66,7 @@ dialogs:
         - '<name>, It was really great to meet you'
     
     story:
-        - 'Once upon a time, some hunters were chasing after an elephant. The elephant was scared and did not know what to do. After a while she met her friend Ant on the road, and told Ant about her problem. Ant said, do not worry, just hide behind me'
+        - 'Once upon a time there was a frog named Sully, Sully loved to sit at the pond on his favourite lily pad, One day, Sully sat and looked around, He could not find his lily pad, The sun was shining and the caterpillars were munching on the leaves, The tadpoles swam around, like they always did, Sully was worried that his favourite lily pad was gone, He looked in front of him, behind him, and all around him, He could not see it anywhere, Sullys friend Betty the butterfly flew over, Whats wrong, Sully, She asked, Sully told her, I dont have time to chat Im busy looking for my favourite lily pad, Betty looked down and said, But Sully, its right under you, You are sitting on it, Sully looked down and there it was, He was sitting on his favourite lily pad the whole time'
         - 'empty'
     
     magic:
@@ -84,7 +84,7 @@ dialogs:
 
 request:
     preference:
-        - 'I would like to ask you something, which of the following activity type do you prefer, acti_1 or acti_2'
+        - 'I would like to ask you something, which kind of activities do you prefer, acti_1 or acti_2'
 #actions:
 #    leadmeditation:
 #        - ' ^call(ALBehaviorManager.runBehavior("breathing/behavior_1"))'
