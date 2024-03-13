@@ -1,8 +1,12 @@
+#ifndef TOBO_CORE_H
+#define TOBO_CORE_H
+
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include <chrono>
+#include <ctime>
 // ROS
 #include <ros/ros.h>
 #include <std_msgs/String.h>
@@ -14,14 +18,15 @@
 #include <naoqi_bridge_msgs/SetFloat.h>
 
 using namespace std;
- 
+
 class ToboCore
 {
 public:
 
-    ToboCore(ros::NodeHandle& rosNode, std::vector<string> &arguments);
+    ToboCore(ros::NodeHandle& rosNode);
     std::vector<std::string> actions_command;
     std::map<std::string,int> actions_count;
+    std::ostringstream logStream;
     
 private: 
 
@@ -41,12 +46,13 @@ private:
     string multimodal_command;
     string request_command;
     
-    string rate =R"( \RSPD=60\ )";
+    string rate =R"( \RSPD=65\ )";
     string pause =R"( \PAU=300\ )";
     string run = " ^call(ALBehaviorManager.runBehavior(\"ToDo\")) ";
     string stand = " ^call(ALRobotPosture.goToPosture(\"Stand\", 0.7)) ";
     
     std::map<std::string,std::vector<string>>::iterator it;
+    std::map<std::string,std::vector<string>>::iterator itd;
     std::map<std::string,std::vector<string>> dialog;
     std::map<std::string,std::vector<string>> actions;
     std::map<std::string,std::vector<string>> request_dialog;
@@ -68,7 +74,10 @@ private:
     void tobo_init(); // Init the robot state
     void tobo_config(); // Config the robot state
     void tobo_action_callback(const tobo_planner::action_chain& msg);
-    void tobo_multimodal_output();
-    void tobo_request_output();
+    void tobo_multimodal_output(std::string action_type, std::string activity);
+    void tobo_request_output(std::string r_type, std::string opt_1, std::string opt_2);
     void replace_key(std::map<std::string,std::vector<string>>& d, std::string all, std::string to);
 };
+
+std::string currentDateTime();
+#endif // TOBO_CORE_H

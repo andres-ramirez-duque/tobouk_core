@@ -1,19 +1,24 @@
-actions:
-  dance:
-  - ' ^call(ALBehaviorManager.runBehavior("shakeit/behavior_1"))'
-  - ' ^call(ALBehaviorManager.runBehavior("arm_dance/behavior_1"))'
-  ivdebrief_song:
-  - ' ^call(ALBehaviorManager.runBehavior("shakeit/behavior_1"))'
-  - ' ^runSound(ALBehaviorManager.runBehavior("guitar/behavior_1"))'
-  leadmeditation:
-  - ' ^call(ALBehaviorManager.runBehavior("breathing/behavior_1"))'
-  - ' ^call(ALBehaviorManager.runBehavior("breathing/behavior_1"))'
-  magic:
-  - ' ^call(ALBehaviorManager.runBehavior("shakeit/behavior_1"))'
-  - ' ^call(ALBehaviorManager.runBehavior("macarena_2/behavior_1"))'
-  song:
-  - ' ^call(ALBehaviorManager.runBehavior("look/behavior_1"))'
-  - ' ^call(ALBehaviorManager.runBehavior("saxophone/behavior_1"))'
-  taichi:
-  - ' ^call(ALBehaviorManager.runBehavior("taichi/taichi"))'
-  - ' ^call(ALBehaviorManager.runBehavior("taichi/taichi"))'
+age: 'true'
+iv: 'true'
+---
+maxdselected asitwas: 'false'
+maxdselected bam: 'false'
+maxdselected blindinglights: 'false'
+maxdselected bruno: 'true'
+maxdselected calmdown: 'false'
+maxdselected happy: 'false'
+maxdselected idontcare: 'false'
+maxdselected look: 'false'
+maxdselected shakeit: 'false'
+maxdselected whatdoyoumean: 'false'
+---
+reward asitwas: 'false'
+reward bam: 'false'
+reward blindinglights: 'false'
+reward bruno: 'false'
+reward calmdown: 'false'
+reward happy: 'false'
+reward idontcare: 'false'
+reward look: 'true'
+reward shakeit: 'false'
+reward whatdoyoumean: 'false'

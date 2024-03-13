@@ -1,7 +1,6 @@
 <launch>
-    <rosparam command="load" file="$(find tobouk_core)/lib_actions/dialogs.yaml"/>
-    <rosparam command="load" file="$(find tobouk_core)/lib_actions/actions.yaml"/> 
-    <param name="action_lib_path" type="str" value="$(find tobouk_core)/lib_actions/"/>
+    <rosparam command="load" file="$(find tobouk_core)/lib_actions/dialogs2.yaml"/>
+    <param name="logs_path" type="str" value="$(find tobouk_web_gui)/web_gui/logs"/>
     <param name="nao_state" type="str" value="bussy"/>
     <param name="trigger_rate" type="int" value="15"/>
     

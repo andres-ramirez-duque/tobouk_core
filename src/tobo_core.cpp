@@ -1,9 +1,16 @@
 #include "tobo_core.hpp"
 
-
 using namespace std;
 
-ToboCore::ToboCore(ros::NodeHandle& rosNode, std::vector<string> &arguments) :
+std::string currentDateTime() {
+    auto now = std::chrono::system_clock::now();
+    auto time = std::chrono::system_clock::to_time_t(now);
+    char buffer[20];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H:%M:%S", std::localtime(&time));
+    return buffer;
+}
+
+ToboCore::ToboCore(ros::NodeHandle& rosNode) :
             rosNode(rosNode)
 {
     tobo_action_sub = rosNode.subscribe("/next_action", 1,&ToboCore::tobo_action_callback,this);
@@ -45,6 +52,7 @@ void ToboCore::tobo_init()
     /*
     intro bye ivdescription song1 song2 dance1 dance2 leadmeditation taichi story quiz magic bowout strategyenforce
     */
+   /*
     actions_command.push_back("intro");
     actions_command.push_back("ivdescription");
     actions_command.push_back("leadmeditation");
@@ -59,31 +67,73 @@ void ToboCore::tobo_init()
     actions_command.push_back("strategyenforce");
     actions_command.push_back("ivdebrief_song");
     
-    ros::param::get("/dialogs/intro", dialog[actions_command[0]]);
-    ros::param::get("/dialogs/ivdescription", dialog[actions_command[1]]);
-    ros::param::get("/dialogs/leadmeditation", dialog[actions_command[2]]);
-    ros::param::get("/dialogs/taichi", dialog[actions_command[3]]);
-    ros::param::get("/dialogs/dance", dialog[actions_command[4]]);
-    ros::param::get("/dialogs/song", dialog[actions_command[5]]);
-    ros::param::get("/dialogs/bye", dialog[actions_command[6]]);
-    ros::param::get("/dialogs/quiz", dialog[actions_command[7]]);
-    ros::param::get("/dialogs/story", dialog[actions_command[8]]);
-    ros::param::get("/dialogs/magic", dialog[actions_command[9]]);
-    ros::param::get("/dialogs/bowout", dialog[actions_command[10]]);
-    ros::param::get("/dialogs/strategyenforce", dialog[actions_command[11]]);
-    ros::param::get("/dialogs/ivdebrief_song", dialog[actions_command[12]]);
+    actions_command.push_back("bruno");
+    actions_command.push_back("look");
+    actions_command.push_back("bam");
+    actions_command.push_back("shakeit");
+    actions_command.push_back("macarena");
+    actions_command.push_back("armdance");
+    actions_command.push_back("happy");
+    actions_command.push_back("calmdown");
+    actions_command.push_back("babyshark");
+    actions_command.push_back("oldmacdonald");
+    actions_command.push_back("fivemonkeys");
+    actions_command.push_back("happyandyouknow");
+    actions_command.push_back("saxophone");
+    actions_command.push_back("guitar");
+    actions_command.push_back("belly");
+    actions_command.push_back("cookies");
+    actions_command.push_back("chocolate");
+    actions_command.push_back("twinklestar");
+    */
+    ros::param::get("/dialogs/intro", dialog["intro"]);
+    ros::param::get("/dialogs/ivdescription", dialog["ivdescription"]);
+    ros::param::get("/dialogs/chocolate", dialog["chocolate"]);
+    ros::param::get("/dialogs/cookies", dialog["cookies"]);
+    ros::param::get("/dialogs/belly", dialog["belly"]);
+    ros::param::get("/dialogs/taichi", dialog["taichi"]);
+    ros::param::get("/dialogs/twinklestar", dialog["twinklestar"]);
+    ros::param::get("/dialogs/dance", dialog["dance"]);
+    ros::param::get("/dialogs/bye", dialog["bye"]);
+    ros::param::get("/dialogs/quiz", dialog["quiz"]);
+    ros::param::get("/dialogs/story", dialog["story"]);
+    ros::param::get("/dialogs/magic", dialog["magic"]);
+    ros::param::get("/dialogs/bowout", dialog["bowout"]);
+    ros::param::get("/dialogs/strategyenforce", dialog["strategyenforce"]);
+    ros::param::get("/dialogs/ivdebrief", dialog["ivdebrief"]);
+    
+    ros::param::get("/actions/belly", actions["belly"]);
+    ros::param::get("/actions/cookies", actions["cookies"]);
+    ros::param::get("/actions/chocolate", actions["chocolate"]);
+    ros::param::get("/actions/taichi", actions["taichi"]);
+    ros::param::get("/actions/twinklestar", actions["twinklestar"]);
+    ros::param::get("/actions/bruno", actions["bruno"]);
+    ros::param::get("/actions/look", actions["look"]);
+    ros::param::get("/actions/bam", actions["bam"]);
+    ros::param::get("/actions/shakeit", actions["shakeit"]);
+    ros::param::get("/actions/macarena", actions["macarena"]);
+    ros::param::get("/actions/armdance", actions["armdance"]);
+    ros::param::get("/actions/happy", actions["happy"]);
+    ros::param::get("/actions/calmdown", actions["calmdown"]);
+    ros::param::get("/actions/babyshark", actions["babyshark"]);
+    ros::param::get("/actions/oldmacdonald", actions["oldmacdonald"]);
+    ros::param::get("/actions/fivemonkeys", actions["fivemonkeys"]);
+    ros::param::get("/actions/happyandyouknow", actions["happyandyouknow"]);
+    ros::param::get("/actions/saxophone", actions["saxophone"]);
+    ros::param::get("/actions/guitar", actions["guitar"]);
+    ros::param::get("/actions/asitwas", actions["asitwas"]);
+    ros::param::get("/actions/whatdoyoumean", actions["whatdoyoumean"]);
+    ros::param::get("/actions/idontcare", actions["idontcare"]);
+    ros::param::get("/actions/blindinglights", actions["blindinglights"]);
+    ros::param::get("/actions/story", actions["story"]);
+    
+    ros::param::get("/request/preference", request_dialog["preference"]);
+    ros::param::get("/request/activity_preference", request_dialog["activity_preference"]);
+    actions_count.insert({"preference",0});
+    actions_count.insert({"activity_preference",0});
 
-    ros::param::get("/actions/leadmeditation", actions[actions_command[2]]);
-    ros::param::get("/actions/taichi", actions[actions_command[3]]);
-    ros::param::get("/actions/dance", actions[actions_command[4]]);
-    ros::param::get("/actions/song", actions[actions_command[5]]);
-    ros::param::get("/actions/magic", actions[actions_command[9]]);
-    ros::param::get("/actions/ivdebrief_song", actions[actions_command[12]]);
-    
-    ros::param::get("/request/preference/", request_dialog["preference"]);
-    
-    for (auto c : actions_command)
-      actions_count.emplace(c, 0);
+    //for (auto c : actions_command)
+    //  actions_count.emplace(c, 0);
     
     string child_name;
     string hospital_name;
@@ -91,7 +141,8 @@ void ToboCore::tobo_init()
     ros::param::param<std::string>("/hospital_name", hospital_name, "SickKidshospital");
     
     replace_key(request_dialog, ",", pause);
-     
+    replace_key(request_dialog, "<name>", child_name);
+
     replace_key(dialog, ",", pause);
     replace_key(dialog, "<name>", child_name);
     replace_key(dialog, "<hospitalname>", hospital_name);
@@ -100,6 +151,7 @@ void ToboCore::tobo_init()
     
     if (! service_aliveness_client.waitForExistence(ros::Duration(30.0))){
       ROS_INFO("Stoping Node for NaoQi inactivity");
+      logStream << "@[" << currentDateTime() << "]@ Stoping Node for NaoQi inactivity" << std::endl;
       ros::shutdown();
     }
     service_aliveness_client.call(srv_aliveness);
@@ -136,36 +188,56 @@ void ToboCore::tobo_config()
     service_aliveness_client.call(srv_aliveness);
 }
 
-void ToboCore::tobo_multimodal_output()
+void ToboCore::tobo_multimodal_output(std::string action_type, std::string activity)
 {
     multimodal_command = "";
-    string activity = get_action_command[0];
-    
-    if (std::find_if(activity.begin(), activity.end(), ::isdigit) != activity.end())
-        activity.erase(std::find_if(activity.begin(), activity.end(), ::isdigit));
-        
-    it = dialog.find(activity);
-    if (it != dialog.end()){
-      multimodal_command = rate;
-      multimodal_command += it->second[actions_count[activity]];
-      it = actions.find(activity);
-      if (it != actions.end())
-        multimodal_command += it->second[actions_count[activity]];
-      publish_speech = true;
-      actions_count[activity]++;
+    multimodal_command = rate;
+    actions_count.insert({activity, 0});
+    if (action_type.find("ivdebrief") != std::string::npos){
+      it = dialog.find(action_type);  
+    }else{
+      it = dialog.find(activity);
     }
+    if (it != dialog.end()){
+      multimodal_command += it->second[actions_count[activity]];
+    }else{
+      itd = dialog.find("dance");
+      actions_count.insert({"dance", 0});
+      if (itd != dialog.end()){
+        multimodal_command += itd->second[actions_count["dance"]];
+        actions_count["dance"]++;
+      }
+    }
+    it = actions.find(activity);
+    if (it != actions.end()){
+      multimodal_command += it->second[actions_count[activity]];
+    }
+    publish_speech = true;
+    actions_count[activity]++;
+    ROS_INFO("Output of: %s", activity.c_str());
 }
 
-void ToboCore::tobo_request_output()
+void ToboCore::tobo_request_output(std::string r_type, std::string opt_1, std::string opt_2)
 {
     request_command = rate;
-    string activity_1 = "Calm";
-    string activity_2 = "Active";
-    replace_key(request_dialog, "acti_1", activity_1);
-    replace_key(request_dialog, "acti_2", activity_2);
-    request_command += request_dialog["preference"][0];
-    
-    publish_request = true;
+    if(r_type.find("qtypepreference") != std::string::npos){
+      request_command += request_dialog["preference"][actions_count["preference"]];
+      actions_count["preference"]++;
+      publish_request = true;
+    }else{
+      std::vector<string> activity_1 = actions[opt_1];
+      std::vector<string> activity_2 = actions[opt_2];
+      std::map<std::string,std::vector<string>> temp_request;
+      std::vector<string> temp_dialog;
+      temp_dialog.push_back(request_dialog["activity_preference"][actions_count["activity_preference"]]);
+      temp_request["activity_preference"] = temp_dialog;
+      replace_key(temp_request, "act_1", activity_1[1]);
+      replace_key(temp_request, "act_2", activity_2[1]);
+      request_command += temp_request["activity_preference"][0];
+      actions_count["activity_preference"]++;
+      publish_request = true;
+    }
+    ROS_INFO("Output of: %s", r_type.c_str());
 }
 void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
 {
@@ -181,16 +253,15 @@ void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
     string hierarchy_name = "/action_hierarchy/" + action_type;
     string hierarchy_value;
     ros::param::get(hierarchy_name, hierarchy_value);
-    
+    logStream << "@[" << currentDateTime() << "]@ action type received: " << action_type << " Index: " << msg.plan_step <<std::endl;
+    ROS_INFO("Action type received: %s, Index: %d", action_type.c_str(), msg.plan_step);
+
     if (hierarchy_value.find("doactivity") != std::string::npos){
-      if (action_type.find("ivdebrief") != std::string::npos){
-        get_action_command = msg.parameters;
-        get_action_command[0] = "ivdebrief_" + get_action_command[0];
-      }else{
-        get_action_command = msg.parameters;
-      }
+      logStream << "@[" << currentDateTime() << "]@ action doactivity found " << std::endl;
+      get_action_command = msg.parameters;
       ROS_INFO("String command: %s", get_action_command[0].c_str());
-      tobo_multimodal_output();
+      logStream << "@[" << currentDateTime() << "]@ action parameters " << get_action_command[0].c_str() << std::endl;
+      tobo_multimodal_output(action_type, get_action_command[0]);
     
       if (publish_speech){
         nao_stat.message="Speech command Sent";
@@ -207,11 +278,13 @@ void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
         nao_stat.level = diagnostic_msgs::DiagnosticStatus::WARN;
       }
       action_executed_msg.execution_status = nao_stat;
-      action_executed_msg.speech_cmd=string(multimodal_command);  
+      action_executed_msg.speech_cmd=string(multimodal_command);
+      logStream << "@[" << currentDateTime() << "]@ Nao speech cmd published " << action_executed_msg.speech_cmd << std::endl;  
       tobo_speech_pub.publish(action_executed_msg);
     }else if (hierarchy_value.find("qtypepreference") != std::string::npos){
-      tobo_request_output();
-    
+      ROS_INFO("Action type qtypepreference started");
+      tobo_request_output("qtypepreference","None", "None");
+      logStream << "@[" << currentDateTime() << "]@ action qtypepreference found " << std::endl;
       if (publish_request){
         nao_stat.message="Request command Sent";
         nao_value.key="Wrong  qtypepreference input";
@@ -227,7 +300,30 @@ void ToboCore::tobo_action_callback(const tobo_planner::action_chain& msg)
         nao_stat.level = diagnostic_msgs::DiagnosticStatus::WARN;
       }
       action_executed_msg.execution_status = nao_stat;
-      action_executed_msg.speech_cmd=string(request_command);  
+      action_executed_msg.speech_cmd=string(request_command);
+      logStream << "@[" << currentDateTime() << "]@ Nao speech cmd published " << action_executed_msg.speech_cmd << std::endl;  
+      tobo_speech_pub.publish(action_executed_msg);
+    }else if (hierarchy_value.find("qactivitypreference") != std::string::npos){
+      ROS_INFO("Action type qactivitypreference started");
+      tobo_request_output("qactivitypreference", msg.parameters[0], msg.parameters[1]);
+      logStream << "@[" << currentDateTime() << "]@ action qactivitypreference found " << std::endl;
+      if (publish_request){
+        nao_stat.message="Request command Sent";
+        nao_value.key="Wrong  qactivitypreference input";
+        nao_value.value = "False";
+        nao_stat.values.push_back(nao_value);
+        nao_stat.level = diagnostic_msgs::DiagnosticStatus::OK;
+      }
+      else{
+        nao_stat.message="Request command Sent";
+        nao_value.key="Wrong  qactivitypreference input";
+        nao_value.value = "True";
+        nao_stat.values.push_back(nao_value);
+        nao_stat.level = diagnostic_msgs::DiagnosticStatus::WARN;
+      }
+      action_executed_msg.execution_status = nao_stat;
+      action_executed_msg.speech_cmd=string(request_command);
+      logStream << "@[" << currentDateTime() << "]@ Nao speech cmd published " << action_executed_msg.speech_cmd << std::endl;  
       tobo_speech_pub.publish(action_executed_msg);
     }
     
