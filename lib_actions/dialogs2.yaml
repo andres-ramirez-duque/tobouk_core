@@ -19,8 +19,8 @@
 #Introduction
 dialogs:
     intro:
-        - 'Hi <name> , im Tobo, it is nice to meet you , Welcome to the <hospitalname> , I am so happy to play with you today, how are you, , I am here to help you while the nurses check you and take care of you, , I will be here with you for the whole time'
-        - 'Hi <name>, I hear that you are having a poke, I also just had one so lets do this together, I will be here with you for the whole time'
+        - 'Hi <name> , im Tobo, it is nice to meet you , Welcome to the <hospitalname> , I am so happy to play with you today, how are you, , I am here to help you while the nurses check you and take care of you, , I can be here with you during your stay'
+        - 'Hi <name>, I hear that you are having a poke, I also just had one so lets do this together, I can be here with you for the whole time'
 # Education    
     ivdescription:
         - 'The doctors, need to give your body some medicine, and the quickest way to get the medicine into your body, is through the IV, first, the nurse will put a rubber band on your arm, this helps the nurse find your veins, it will feel snug like a hug, Next, the nurse will clean the area with soap. It feels cold and wet'
@@ -86,14 +86,14 @@ dialogs:
         - 'empty'
     
     strategyenforce: #During SiteCheck -> sceducateonprocedure
-        - 'Now, can I remind you about your two important jobs , the first is to be nice and still, and the second is to take nice big breath , I know you can do it , Maybe you can practice while the nurse looks at your arm'
+        - 'Now, can I remind you about your two important jobs , the first is to stand still like a statue, and the second is to take a big breath , I know you can do it , Maybe you can practice while the nurse looks at your arm'
         - 'The nurses have to check your arms and hands for a place to put the medicine, , they will put a rubber band around your arm that feels like a big squeeze, , be very still so the nurses can take a look at your arms'
         - 'Veins are tunnels in your body that run from the tip of your toes to the top of your head. They bring vitamins, oxygen, and medicine to the places where your body needs it most'
         - 'empty'
 
 request:
     preference:
-        - ' <name> , Lets make a plan for when you get your medicine, will we do some quiet activities like deep breathing and listen a story, , or do you want me to sing and dance'
+        - ' <name> , Lets make a plan for when you get your medicine, will we do some quiet activities like deep breathing and listening to a story, , or do you want me to sing and dance'
         - ' <name> , are you in the mood to watch me dance or listen to a story'
     activity_preference: #qactivitypreference
         - ' <name> , what will I do next, , <act_1> or <act_2>'
