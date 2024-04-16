@@ -19,7 +19,7 @@
 #Introduction
 dialogs:
     intro:
-        - 'Hi <name> , im Tobo, it is nice to meet you , Welcome to the <hospitalname> , I am so happy to play with you today, how are you, , I am here to help you while the nurses check you and take care of you, , I can be here with you during your stay'
+        - 'Hi <name> , im Tobo, it is nice to meet you , Welcome to the <hospitalname> , I am so happy to play with you today, how are you, , I am here to help you while the nurses check you and take care of you, , I can be here with you for the whole time'
         - 'Hi <name>, I hear that you are having a poke, I also just had one so lets do this together, I can be here with you for the whole time'
 # Education    
     ivdescription:
